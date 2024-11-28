@@ -1,9 +1,11 @@
 #define CHAN_KEY 0
 #define CHAN_LIGHT 3
+#define MA_BROCHE_ANGLE 32
 
 #include <M5Atom.h>
 
 // Initialisation des variables
+CRGB pixel;
 
 unsigned long chronoMessage;
 
@@ -60,8 +62,11 @@ void loop() {
     chronoMessage = millis();
     int maLectureLight = myPbHub.analogRead(CHAN_LIGHT);
     int maLectureKey = myPbHub.digitalRead(CHAN_KEY);
-    int lightMap = map(maLectureLight, 1200, 4095, 0, 127);
-    monOsc.sendInt("/lightMap", lightMap);
+    monOsc.sendInt("/lightMap", maLectureLight);
+
+    float maLectureGesture = analogRead(MA_BROCHE_ANGLE);
+    monOsc.sendFloat("/gesture", maLectureGesture);
+
     if (maLectureKey != maLectureKeyPrecedente) {
       if (maLectureKey == 0) {
         maLectureToggle = !maLectureToggle;
