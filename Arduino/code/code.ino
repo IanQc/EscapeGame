@@ -50,10 +50,6 @@ void setup() {
   myPbHub.begin();
   myPbHub.setPixelCount(CHAN_KEY, 1);
 
-  myTOF.init();
-  myTOF.setTimeout(500);
-  myTOF.startContinuous();
-
   myEncoder.begin();
 }
 /*
@@ -87,29 +83,15 @@ void loop() {
         monOsc.sendInt("/vkb_midi/9/note/64", 127);
         isPlaying = !isPlaying;
       } else if (maLectureKey == 0 && isPlaying == true) {
-        monOsc.sendInt("/vkb_midi/9/note/64", 0);
+        monOsc.sendInt("Key", 0);
         isPlaying = !isPlaying;
       }
     }
     maLectureKeyPrecedente = maLectureKey;
-    
-    uint16_t value = myTOF.readRangeContinuousMillimeters();
-    int tofPosition = map(value, 0, 1200, 0, 127);
-
-    int error = myTOF.timeoutOccurred();
-    if (myTOF.timeoutOccurred()) {
-      monOsc.sendInt("/TOFTIMEOUT", 1);
-    } else {
-      monOsc.sendInt("/tof", value);
-      if (value <= 1200) {
-        monOsc.sendInt("/vkb_midi/9/cc/13", tofPosition);
-      } 
-      monOsc.sendInt("/TOFERROR", error);
-    }
 
     int maLectureLight = myPbHub.analogRead(CHAN_LIGHT);
     int compressedLight = map(maLectureLight, 1000, 4100, 0, 64);
-    monOsc.sendInt("/vkb_midi/9/cc/12", compressedLight);
+    monOsc.sendInt("Light", compressedLight);
 
   }
 }
