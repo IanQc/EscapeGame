@@ -5,6 +5,7 @@ using UnityEngine;
 public class intro : MonoBehaviour
 {
     public GameObject joueur;
+    public GameObject uvLight;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,9 +23,15 @@ public class intro : MonoBehaviour
 
     private IEnumerator test()
     {
-        yield return new WaitForSeconds(15);
+        yield return new WaitForSeconds(10);
         Debug.Log("positionSet");
         joueur.GetComponent<Animator>().Play("shineLight");
+        yield return new WaitForSeconds(5);
+        joueur.GetComponent<Animator>().Play("shineOff");
+        yield return new WaitForSeconds(5);
+        uvLight.GetComponent<Animator>().Play("uvPowerOn");
+        yield return new WaitForSeconds(5);
+        uvLight.GetComponent<Animator>().Play("uvPowerOff");
         yield break;
     }
 }
