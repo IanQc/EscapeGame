@@ -14,17 +14,6 @@ MicroOscSlip<128> monOsc(&Serial);
 #include <M5_PbHub.h>
 M5_PbHub myPbHub;
 
-#include <VL53L0X.h>
-VL53L0X myTOF;
-
-#include "Unit_Encoder.h"
-Unit_Encoder myEncoder;
-
-int myEncoderPreviousRotation;
-
-int maLectureKeyPrecedente;
-int etatPlay;
-
 void setup() {
   // put your setup code here, to run once:
   M5.begin(false, false, false);
@@ -63,7 +52,6 @@ void maReceptionMessageOsc(MicroOscMessage& oscMessage) {
   }
 }*/
 
-bool isPlaying = false;
 
 void loop() {
   // put your main code here, to run repeatedly:
@@ -77,21 +65,17 @@ void loop() {
 
     int maLectureKey = myPbHub.digitalRead(CHAN_KEY);
 
-    if (maLectureKeyPrecedente != maLectureKey) {
-      if (maLectureKey == 0 && isPlaying == false) {
-        // /vkb_midi/@/note/# i
-        monOsc.sendInt("/vkb_midi/9/note/64", 127);
-        isPlaying = !isPlaying;
-      } else if (maLectureKey == 0 && isPlaying == true) {
-        monOsc.sendInt("Key", 0);
-        isPlaying = !isPlaying;
+      if (maLectureKey == 0) {
+        monOsc.sendInt("/Key", 1);
+      } else {
+        monOsc.sendInt("/Key", 0);
       }
-    }
-    maLectureKeyPrecedente = maLectureKey;
+    
+
 
     int maLectureLight = myPbHub.analogRead(CHAN_LIGHT);
-    int compressedLight = map(maLectureLight, 1000, 4100, 0, 64);
-    monOsc.sendInt("Light", compressedLight);
+    int compressedLight = map(maLectureLight, 0, 4100, 0, 100);
+    monOsc.sendInt("/Light", compressedLight);
 
   }
 }
