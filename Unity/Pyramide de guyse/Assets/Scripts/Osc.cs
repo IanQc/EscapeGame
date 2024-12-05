@@ -14,8 +14,8 @@ public class Osc : MonoBehaviour
     private void Start()
     {
         // Mettre cette ligne dans la méthode start()
-        oscReceiver.Bind("/lightMap", TraiterMessageOSC);
-        oscReceiver.Bind("/keyUnit", TraiterMessageOSC);
+        oscReceiver.Bind("/Key", TraiterMessageOSC);
+        oscReceiver.Bind("/Light", TraiterMessageOSC);
     }
 
     public static float ScaleValue(float value, float inputMin, float inputMax, float outputMin, float outputMax)
