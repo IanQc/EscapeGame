@@ -1,4 +1,4 @@
-#define CHAN_CONFIRM 0
+#define CHAN_WHITE 0
 #define CHAN_BLUE 1
 #define CHAN_RED 2
 #define CHAN_GREEN 3
@@ -42,7 +42,7 @@ void setup() {
 
   Wire.begin();
   myPbHub.begin();
-  myPbHub.setPixelCount(CHAN_CONFIRM, 1);
+  myPbHub.setPixelCount(CHAN_WHITE, 1);
   myPbHub.setPixelCount(CHAN_BLUE, 1);
   myPbHub.setPixelCount(CHAN_RED, 1);
   myPbHub.setPixelCount(CHAN_GREEN, 1);
@@ -71,7 +71,7 @@ void loop() {
   if (millis() - monChronoMessages >= 20) {
     monChronoMessages = millis();
 
-    int confirmKey = myPbHub.digitalRead(CHAN_CONFIRM);
+    int confirmKey = myPbHub.digitalRead(CHAN_WHITE);
     int redKey = myPbHub.digitalRead(CHAN_RED);
     int greenKey = myPbHub.digitalRead(CHAN_GREEN);
     int blueKey = myPbHub.digitalRead(CHAN_BLUE);
@@ -82,7 +82,7 @@ void loop() {
         monOsc.sendInt("/Key", 0);
       }
     
-    myPbHub.setPixelColor(CHAN_CONFIRM, 0, 255, 255, 255);
+    myPbHub.setPixelColor(CHAN_WHITE, 0, 255, 255, 255);
     myPbHub.setPixelColor(CHAN_RED, 0, 255, 0, 0);
     myPbHub.setPixelColor(CHAN_GREEN, 0, 0, 255, 0);
     myPbHub.setPixelColor(CHAN_BLUE, 0, 0, 0, 255);

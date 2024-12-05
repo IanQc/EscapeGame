@@ -9,7 +9,10 @@ public class Osc : MonoBehaviour
 {
     public extOSC.OSCReceiver oscReceiver;
     public extOSC.OSCTransmitter oscTransmitter;
-    public GameObject outerRing;
+
+    public GameObject[] ring;
+    private int ringSuccess = 0;
+    private float currentRotation = 0;
 
     private void Start()
     {
@@ -17,6 +20,15 @@ public class Osc : MonoBehaviour
         //oscReceiver.Bind("/Key", TraiterMessageOSC);
         //oscReceiver.Bind("/Light", TraiterMessageOSC);
         oscReceiver.Bind("/rotation", TraiterRotationOSC);
+        oscReceiver.Bind("/button", TraiterConfirmOSC);
+
+    }
+
+    private void Update()
+    {
+        currentRotation = ring[ringSuccess].transform.rotation.eulerAngles.y;
+
+        //Debug.Log(currentRotation);
     }
 
     public static float ScaleValue(float value, float inputMin, float inputMax, float outputMin, float outputMax)
@@ -43,11 +55,48 @@ public class Osc : MonoBehaviour
             return;
         }
 
-        Debug.Log(value);
+        //Debug.Log(value);
 
         // Changer l'échelle de la valeur pour l'appliquer à la rotation :
         // Appliquer la rotation au GameObject ciblé :
-        outerRing.transform.eulerAngles = new Vector3(outerRing.transform.rotation.eulerAngles.x, value, outerRing.transform.rotation.eulerAngles.z);
+        ring[ringSuccess].transform.eulerAngles = new Vector3(ring[ringSuccess].transform.rotation.eulerAngles.x, value, ring[ringSuccess].transform.rotation.eulerAngles.z);
+    }
+
+    void TraiterConfirmOSC(OSCMessage oscMessage)
+    {
+        // Récupérer une valeur numérique en tant que float
+        // même si elle est de type float ou int :
+        float value;
+        if (oscMessage.Values[0].Type == OSCValueType.Int)
+        {
+            value = oscMessage.Values[0].IntValue;
+        }
+        else if (oscMessage.Values[0].Type == OSCValueType.Float)
+        {
+            value = oscMessage.Values[0].FloatValue;
+        }
+        else
+        {
+            // Si la valeur n'est ni un foat ou int, on quitte la méthode :
+            return;
+        }
+
+        Debug.Log(value);
+
+        if (currentRotation >= 195 && currentRotation <= 215 && ringSuccess == 0 && value == 0)
+        {
+            ringSuccess++;
+        }
+        else if (currentRotation >= 110 && currentRotation <= 140 && ringSuccess == 1 && value == 0)
+        {
+            ringSuccess++;
+
+        }
+        else if (currentRotation >= 191 && currentRotation <= 211 && ringSuccess == 2 && value == 0)
+        {
+
+            Debug.Log("win");
+        }
     }
 
     void TraiterMessageOSC(OSCMessage oscMessage)
