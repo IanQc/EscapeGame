@@ -1,8 +1,14 @@
-#define CHAN_KEY 0
-#define CHAN_ANGLE 1
+#define CHAN_CONFIRM 0
+#define CHAN_BLUE 1
+#define CHAN_RED 2
+#define CHAN_GREEN 3
 #define CHAN_LIGHT 5
 
 #include <M5Atom.h>
+
+#include "Unit_Encoder.h"
+Unit_Encoder myEncoder;
+int myEncoderPreviousRotation;
 
 CRGB pixel;
 
@@ -35,9 +41,11 @@ void setup() {
   FastLED.show();
 
   Wire.begin();
-
   myPbHub.begin();
-  myPbHub.setPixelCount(CHAN_KEY, 1);
+  myPbHub.setPixelCount(CHAN_CONFIRM, 1);
+  myPbHub.setPixelCount(CHAN_BLUE, 1);
+  myPbHub.setPixelCount(CHAN_RED, 1);
+  myPbHub.setPixelCount(CHAN_GREEN, 1);
 
   myEncoder.begin();
 }
@@ -63,19 +71,31 @@ void loop() {
   if (millis() - monChronoMessages >= 20) {
     monChronoMessages = millis();
 
-    int maLectureKey = myPbHub.digitalRead(CHAN_KEY);
+    int confirmKey = myPbHub.digitalRead(CHAN_CONFIRM);
+    int redKey = myPbHub.digitalRead(CHAN_RED);
+    int greenKey = myPbHub.digitalRead(CHAN_GREEN);
+    int blueKey = myPbHub.digitalRead(CHAN_BLUE);
 
-      if (maLectureKey == 0) {
+      if (confirmKey == 0) {
         monOsc.sendInt("/Key", 1);
       } else {
         monOsc.sendInt("/Key", 0);
       }
     
-
+    myPbHub.setPixelColor(CHAN_CONFIRM, 0, 255, 255, 255);
+    myPbHub.setPixelColor(CHAN_RED, 0, 255, 0, 0);
+    myPbHub.setPixelColor(CHAN_GREEN, 0, 0, 255, 0);
+    myPbHub.setPixelColor(CHAN_BLUE, 0, 0, 0, 255);
 
     int maLectureLight = myPbHub.analogRead(CHAN_LIGHT);
     int compressedLight = map(maLectureLight, 0, 4100, 0, 100);
     monOsc.sendInt("/Light", compressedLight);
+
+    int encoderRotation = myEncoder.getEncoderValue();
+    int encoderButton = myEncoder.getButtonStatus();
+    monOsc.sendInt("/rotation", encoderRotation);
+    monOsc.sendInt("/button", encoderButton);
+    
 
   }
 }
