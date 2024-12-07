@@ -47,6 +47,11 @@ void setup() {
   myPbHub.setPixelCount(CHAN_RED, 1);
   myPbHub.setPixelCount(CHAN_GREEN, 1);
 
+  myPbHub.setPixelColor(CHAN_WHITE, 0, 255, 255, 255);
+  myPbHub.setPixelColor(CHAN_RED, 0, 255, 0, 0);
+  myPbHub.setPixelColor(CHAN_GREEN, 0, 0, 255, 0);
+  myPbHub.setPixelColor(CHAN_BLUE, 0, 0, 0, 255);
+
   myEncoder.begin();
 }
 /*
@@ -77,19 +82,31 @@ void loop() {
     int blueKey = myPbHub.digitalRead(CHAN_BLUE);
 
       if (confirmKey == 0) {
-        monOsc.sendInt("/Key", 1);
+        monOsc.sendInt("/KeyWhite", 1);
       } else {
-        monOsc.sendInt("/Key", 0);
+        monOsc.sendInt("/KeyWhite", 0);
       }
     
-    myPbHub.setPixelColor(CHAN_WHITE, 0, 255, 255, 255);
-    myPbHub.setPixelColor(CHAN_RED, 0, 255, 0, 0);
-    myPbHub.setPixelColor(CHAN_GREEN, 0, 0, 255, 0);
-    myPbHub.setPixelColor(CHAN_BLUE, 0, 0, 0, 255);
+      if (redKey == 0) {
+        monOsc.sendInt("/KeyRed", 1);
+      } else {
+        monOsc.sendInt("/KeyRed", 0);
+      }
+
+      if (greenKey == 0) {
+        monOsc.sendInt("/KeyGreen", 1);
+      } else {
+        monOsc.sendInt("/KeyGreen", 0);
+      }
+
+      if (blueKey == 0) {
+        monOsc.sendInt("/KeyBlue", 1);
+      } else {
+        monOsc.sendInt("/KeyBlue", 0);
+      }
 
     int maLectureLight = myPbHub.analogRead(CHAN_LIGHT);
-    int compressedLight = map(maLectureLight, 0, 4100, 0, 100);
-    monOsc.sendInt("/Light", compressedLight);
+    monOsc.sendInt("/Light", maLectureLight);
 
     int encoderRotation = myEncoder.getEncoderValue();
     int encoderButton = myEncoder.getButtonStatus();
