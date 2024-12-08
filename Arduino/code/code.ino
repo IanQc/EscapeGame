@@ -4,11 +4,19 @@
 #define CHAN_GREEN 3
 #define CHAN_LIGHT 5
 
+int lastWhite;
+int lastBlue;
+int lastRed;
+int lastGreen;
+
 #include <M5Atom.h>
 
 #include "Unit_Encoder.h"
 Unit_Encoder myEncoder;
 int myEncoderPreviousRotation;
+
+int lastEncoderRotation;
+int lastEncoderPress;
 
 CRGB pixel;
 
@@ -76,43 +84,61 @@ void loop() {
   if (millis() - monChronoMessages >= 20) {
     monChronoMessages = millis();
 
-    int confirmKey = myPbHub.digitalRead(CHAN_WHITE);
+    int whiteKey = myPbHub.digitalRead(CHAN_WHITE);
     int redKey = myPbHub.digitalRead(CHAN_RED);
     int greenKey = myPbHub.digitalRead(CHAN_GREEN);
     int blueKey = myPbHub.digitalRead(CHAN_BLUE);
 
-      if (confirmKey == 0) {
+    if(lastWhite != whiteKey) {
+      if (whiteKey == 0) {
         monOsc.sendInt("/KeyWhite", 1);
       } else {
         monOsc.sendInt("/KeyWhite", 0);
       }
-    
+    }
+    lastWhite = whiteKey;
+
+    if(lastRed != redKey) {
       if (redKey == 0) {
         monOsc.sendInt("/KeyRed", 1);
       } else {
         monOsc.sendInt("/KeyRed", 0);
       }
+    }
+    lastRed = redKey;
 
+    if(lastGreen != greenKey) {
       if (greenKey == 0) {
         monOsc.sendInt("/KeyGreen", 1);
       } else {
         monOsc.sendInt("/KeyGreen", 0);
       }
+    }
+    lastGreen = greenKey;
 
+    if(lastBlue != blueKey) {
       if (blueKey == 0) {
         monOsc.sendInt("/KeyBlue", 1);
       } else {
         monOsc.sendInt("/KeyBlue", 0);
       }
+    }
+    lastBlue = blueKey;
 
     int maLectureLight = myPbHub.analogRead(CHAN_LIGHT);
     monOsc.sendInt("/Light", maLectureLight);
 
     int encoderRotation = myEncoder.getEncoderValue();
     int encoderButton = myEncoder.getButtonStatus();
-    monOsc.sendInt("/rotation", encoderRotation);
-    monOsc.sendInt("/button", encoderButton);
-    
 
+    if(lastEncoderRotation != encoderRotation) {
+      monOsc.sendInt("/rotation", encoderRotation);
+    }
+    lastEncoderRotation = encoderRotation;
+
+    if(lastEncoderPress != encoderButton) {
+      monOsc.sendInt("/button", encoderButton);
+    }
+    lastEncoderPress = encoderButton;
   }
 }

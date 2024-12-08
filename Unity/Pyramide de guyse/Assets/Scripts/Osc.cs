@@ -4,6 +4,7 @@ using UnityEngine;
 using extOSC;
 using static UnityEngine.GraphicsBuffer;
 using Unity.VisualScripting;
+using System;
 
 public class Osc : MonoBehaviour
 {
@@ -14,16 +15,26 @@ public class Osc : MonoBehaviour
     public GameObject[] ring;
     private int ringSuccess = 0;
     private float currentRotation = 0;
+    private bool ringWin = false;
 
     // Related player
     public GameObject player;
     public GameObject UVlight;
 
-    //Related to the keys values and light puzzle
+    //Related to the keys values and light puzzle lord help me...
     private float whiteKey;
+    private int whitePosition;
     private float redKey;
+    private int redPosition;
     private float greenKey;
+    private int greenPosition;
     private float blueKey;
+    private int bluePosition;
+    private float[] winsOrder = new float[4];
+    private int[] winsOrderNumber = {0, 1, 2, 3};
+    private int winsOrderSuccess = 0;
+    private bool recentWin = false;
+
 
     private void Start()
     {
@@ -36,21 +47,85 @@ public class Osc : MonoBehaviour
         oscReceiver.Bind("/rotation", TraiterRotationOSC);
         oscReceiver.Bind("/button", TraiterConfirmOSC);
 
+
+        Shuffle(winsOrderNumber);
+
+        // Print the shuffled array
+        foreach (var item in winsOrderNumber)
+        {
+            Debug.Log(item);
+        }
+
+        for (int i = 0; i < winsOrderNumber.Length; i++)
+        {
+            if (i == 0)
+            {
+                winsOrder[i] = whiteKey;
+                whitePosition = i;
+            } 
+            else if (i == 1)
+            {
+                winsOrder[i] = redKey;
+                redPosition = i;
+            } 
+            else if (i == 2)
+            {
+                winsOrder[i] = greenKey;
+                greenPosition = i;
+            } 
+            else if(i == 3)
+            {
+                winsOrder[i] = blueKey;
+                bluePosition = i;
+            }
+        }
+
+    }
+
+    void Shuffle(int[] array)
+    {
+        System.Random rand = new System.Random();
+        for (int i = array.Length - 1; i > 0; i--)
+        {
+            int j = rand.Next(i + 1); // Random index between 0 and i
+            // Swap elements at i and j
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
     }
 
     private void Update()
     {
         currentRotation = ring[ringSuccess].transform.rotation.eulerAngles.y;
-
-        LightPuzzle();
     }
 
-    private void LightPuzzle()
+    private void LightPuzzle(float value)
     {
-        if (whiteKey == 1)
-        {
+        recentWin = false;
 
+        if (winsOrder[winsOrderSuccess] == 1 && winsOrderSuccess <= 2)
+        {
+            Debug.Log("doing well");
+            winsOrderSuccess++;
+            recentWin = true;
+            return;
         }
+        else if (winsOrderSuccess == 3 && winsOrder[3] == 1)
+        {
+            Debug.Log("win");
+            ringWin = false;
+        }
+        else if (value != 0 && recentWin != true)
+        {
+            Debug.Log("fail");
+            winsOrderSuccess = 0;
+        }
+    }
+
+    private void colorCode()
+    {
+
     }
 
     public static float ScaleValue(float value, float inputMin, float inputMax, float outputMin, float outputMax)
@@ -73,7 +148,7 @@ public class Osc : MonoBehaviour
         }
         else
         {
-            // Si la valeur n'est ni un foat ou int, on quitte la méthode :
+            // Si la valeur n'est ni un float ou int, on quitte la méthode :
             return;
         }
 
@@ -98,7 +173,7 @@ public class Osc : MonoBehaviour
         }
         else
         {
-            // Si la valeur n'est ni un foat ou int, on quitte la méthode :
+            // Si la valeur n'est ni un float ou int, on quitte la méthode :
             return;
         }
 
@@ -115,7 +190,8 @@ public class Osc : MonoBehaviour
         }
         else if (currentRotation >= 191 && currentRotation <= 211 && ringSuccess == 2 && value == 0)
         {
-
+            ringWin = true;
+            colorCode();
             Debug.Log("win");
         }
     }
@@ -135,13 +211,21 @@ public class Osc : MonoBehaviour
         }
         else
         {
-            // Si la valeur n'est ni un foat ou int, on quitte la méthode :
+            // Si la valeur n'est ni un float ou int, on quitte la méthode :
             return;
         }
 
         //Debug.Log(value);
 
         whiteKey = value;
+
+        winsOrder[whitePosition] = whiteKey;
+
+        if(ringWin == true)
+        {
+            LightPuzzle(whiteKey);
+        }
+        
     }
 
     void TraiterRedOSC(OSCMessage oscMessage)
@@ -159,13 +243,20 @@ public class Osc : MonoBehaviour
         }
         else
         {
-            // Si la valeur n'est ni un foat ou int, on quitte la méthode :
+            // Si la valeur n'est ni un float ou int, on quitte la méthode :
             return;
         }
 
-        Debug.Log(value);
+        //Debug.Log(value);
 
         redKey = value;
+
+        winsOrder[redPosition] = redKey;
+
+        if (ringWin == true)
+        {
+            LightPuzzle(redKey);
+        }
     }
 
     void TraiterGreenOSC(OSCMessage oscMessage)
@@ -183,13 +274,22 @@ public class Osc : MonoBehaviour
         }
         else
         {
-            // Si la valeur n'est ni un foat ou int, on quitte la méthode :
+            // Si la valeur n'est ni un float ou int, on quitte la méthode :
             return;
         }
 
-        Debug.Log(value);
+        //Debug.Log(value);
 
         greenKey = value;
+
+        winsOrder[greenPosition] = greenKey;
+
+        if (ringWin == true)
+        {
+            LightPuzzle(greenKey);
+        }
+
+
     }
 
     void TraiterBlueOSC(OSCMessage oscMessage)
@@ -207,13 +307,22 @@ public class Osc : MonoBehaviour
         }
         else
         {
-            // Si la valeur n'est ni un foat ou int, on quitte la méthode :
+            // Si la valeur n'est ni un float ou int, on quitte la méthode :
             return;
         }
 
-        Debug.Log(value);
+        //Debug.Log(value);
 
         blueKey = value;
+
+        winsOrder[bluePosition] = blueKey;
+
+        if (ringWin == true)
+        {
+            LightPuzzle(blueKey);
+        }
+
+
     }
 
     void TraiterLightOSC(OSCMessage oscMessage)
@@ -231,11 +340,11 @@ public class Osc : MonoBehaviour
         }
         else
         {
-            // Si la valeur n'est ni un foat ou int, on quitte la méthode :
+            // Si la valeur n'est ni un float ou int, on quitte la méthode :
             return;
         }
 
-        Debug.Log(value);
+        //Debug.Log(value);
 
         UVlight.GetComponent<Light>().intensity = ScaleValue(value, 0, 4095, 45, 315);
 
@@ -256,11 +365,11 @@ public class Osc : MonoBehaviour
         }
         else
         {
-            // Si la valeur n'est ni un foat ou int, on quitte la méthode :
+            // Si la valeur n'est ni un float ou int, on quitte la méthode :
             return;
         }
 
-        Debug.Log(value);
+        //Debug.Log(value);
 
         // Changer l'échelle de la valeur pour l'appliquer à la rotation :
         float rotation = ScaleValue(value, 0, 4095, 45, 315);
