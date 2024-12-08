@@ -1756,6 +1756,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 407726, guid: c0df214d13f58a049aaf0e5705beb53e, type: 3}
   m_PrefabInstance: {fileID: 644203164}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &645553995 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9161420556792827848, guid: 973c2418f316bb84b84b8432b0e7e959, type: 3}
+  m_PrefabInstance: {fileID: 7795824319655780285}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &656608020
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2652,6 +2657,8 @@ MonoBehaviour:
   - {fileID: 1824957976}
   - {fileID: 1824957975}
   - {fileID: 1824957974}
+  player: {fileID: 645553995}
+  UVlight: {fileID: 894415808}
 --- !u!114 &882908250
 MonoBehaviour:
   m_ObjectHideFlags: 0

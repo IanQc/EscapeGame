@@ -62,16 +62,6 @@ void setup() {
 
   myEncoder.begin();
 }
-/*
-void maReceptionMessageOsc(MicroOscMessage& oscMessage) {
-
-  if ( oscMessage.checkOscAddress("/master/vu")) {
-    float vu = oscMessage.nextAsFloat();
-    int niveau = floor(vu*255.0);
-    pixel = CRGB(niveau,niveau,niveau);
-    FastLED.show();
-  }
-}*/
 
 
 void loop() {

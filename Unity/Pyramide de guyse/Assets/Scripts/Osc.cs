@@ -60,26 +60,33 @@ public class Osc : MonoBehaviour
         {
             if (i == 0)
             {
-                winsOrder[i] = whiteKey;
-                whitePosition = i;
+                whitePosition = winsOrderNumber[i];
+                winsOrder[whitePosition] = whiteKey;
             } 
             else if (i == 1)
             {
-                winsOrder[i] = redKey;
-                redPosition = i;
+                redPosition = winsOrderNumber[i];
+                winsOrder[redPosition] = redKey;
             } 
             else if (i == 2)
             {
-                winsOrder[i] = greenKey;
-                greenPosition = i;
+                greenPosition = winsOrderNumber[i];
+                winsOrder[greenPosition] = greenKey;
             } 
             else if(i == 3)
             {
-                winsOrder[i] = blueKey;
-                bluePosition = i;
+                bluePosition = winsOrderNumber[i];
+                winsOrder[bluePosition] = blueKey;
             }
         }
 
+
+        colorSequence();
+    }
+
+    private void Update()
+    {
+        currentRotation = ring[ringSuccess].transform.rotation.eulerAngles.y;
     }
 
     void Shuffle(int[] array)
@@ -95,9 +102,38 @@ public class Osc : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void colorSequence() // NOT FINISHED
     {
-        currentRotation = ring[ringSuccess].transform.rotation.eulerAngles.y;
+        string white = winsOrderNumber[0].ToString();
+        string red = winsOrderNumber[1].ToString();
+        string green = winsOrderNumber[2].ToString();
+        string blue = winsOrderNumber[3].ToString();
+
+        Debug.Log(white + red + green + blue);
+
+        for (int i = 0; i < winsOrderNumber.Length; i++)
+        {
+            if (winsOrderNumber[i] == 0)
+            {
+                Debug.Log("white");
+                // play color animation
+            } 
+            else if (winsOrderNumber[i] == 1)
+            {
+                Debug.Log("red");
+                // play color animation
+            }
+            else if (winsOrderNumber[i] == 2)
+            {
+                Debug.Log("green");
+                // play color animation
+            }
+            else if (winsOrderNumber[i] == 3)
+            {
+                Debug.Log("blue");
+                // play color animation
+            }
+        }
     }
 
     private void LightPuzzle(float value)
@@ -121,11 +157,6 @@ public class Osc : MonoBehaviour
             Debug.Log("fail");
             winsOrderSuccess = 0;
         }
-    }
-
-    private void colorCode()
-    {
-
     }
 
     public static float ScaleValue(float value, float inputMin, float inputMax, float outputMin, float outputMax)
@@ -191,7 +222,7 @@ public class Osc : MonoBehaviour
         else if (currentRotation >= 191 && currentRotation <= 211 && ringSuccess == 2 && value == 0)
         {
             ringWin = true;
-            colorCode();
+            colorSequence();
             Debug.Log("win");
         }
     }
@@ -346,7 +377,7 @@ public class Osc : MonoBehaviour
 
         //Debug.Log(value);
 
-        UVlight.GetComponent<Light>().intensity = ScaleValue(value, 0, 4095, 45, 315);
+        UVlight.GetComponent<Light>().intensity = ScaleValue(value, 4095, 0, 0, 3);
 
     }
 
