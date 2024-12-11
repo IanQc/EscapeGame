@@ -2656,6 +2656,7 @@ MonoBehaviour:
   - {fileID: 1824957974}
   player: {fileID: 1085535750}
   UVlight: {fileID: 894415808}
+  ColoredBall: {fileID: 627473757}
 --- !u!114 &882908250
 MonoBehaviour:
   m_ObjectHideFlags: 0

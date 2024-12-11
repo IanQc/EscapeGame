@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/PyramidOfGyatt.unity
+    guid: 6c54f6cc403deb74c88cc7b77082cf42
   m_configObjects: {}

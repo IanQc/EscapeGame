@@ -17,6 +17,7 @@ public class Osc : MonoBehaviour
     private int ringSuccess = 0;
     private float currentRotation = 0;
     private bool ringWin = false;
+    private bool isLooking = false;
 
     // Related player
     public GameObject player;
@@ -24,18 +25,24 @@ public class Osc : MonoBehaviour
 
     //Related to the keys values and light puzzle lord help me...
     private float whiteKey;
-    private int whitePosition;
+    //private int whitePosition;
+
     private float redKey;
-    private int redPosition;
+    //private int redPosition;
+
     private float greenKey;
-    private int greenPosition;
+    //private int greenPosition;
+
     private float blueKey;
-    private int bluePosition;
+    //private int bluePosition;
+
     private float[] winsOrder = new float[4];
     private int[] winsOrderNumber = {0, 1, 2, 3};
-    private int winsOrderSuccess = 0;
+
+    private float winsOrderSuccess = 0;
     private bool recentWin = false;
 
+    public GameObject ColoredBall;
 
     private void Start()
     {
@@ -48,7 +55,9 @@ public class Osc : MonoBehaviour
         oscReceiver.Bind("/rotation", TraiterRotationOSC);
         oscReceiver.Bind("/button", TraiterConfirmOSC);
 
+        Debug.Log("code is : blue, red, white, green");
 
+        /*
         Shuffle(winsOrderNumber);
 
         // Print the shuffled array
@@ -59,37 +68,42 @@ public class Osc : MonoBehaviour
 
         for (int i = 0; i < winsOrderNumber.Length; i++)
         {
-            if (i == 0)
+            if (winsOrderNumber[i] == 0)
             {
                 whitePosition = winsOrderNumber[i];
                 winsOrder[whitePosition] = whiteKey;
+                Debug.Log(whitePosition);
             } 
-            else if (i == 1)
+            else if (winsOrderNumber[i] == 1)
             {
                 redPosition = winsOrderNumber[i];
                 winsOrder[redPosition] = redKey;
+                Debug.Log(redPosition);
             } 
-            else if (i == 2)
+            else if (winsOrderNumber[i] == 2)
             {
                 greenPosition = winsOrderNumber[i];
                 winsOrder[greenPosition] = greenKey;
+                Debug.Log(greenPosition);
             } 
-            else if(i == 3)
+            else if(winsOrderNumber[i] == 3)
             {
                 bluePosition = winsOrderNumber[i];
                 winsOrder[bluePosition] = blueKey;
+                Debug.Log(bluePosition);
             }
         }
 
 
-        colorSequence();
+
+        colorSequence();*/
     }
 
     private void Update()
     {
         currentRotation = ring[ringSuccess].transform.rotation.eulerAngles.y;
     }
-
+    /*
     void Shuffle(int[] array)
     {
         System.Random rand = new System.Random();
@@ -101,8 +115,8 @@ public class Osc : MonoBehaviour
             array[i] = array[j];
             array[j] = temp;
         }
-    }
-
+    }*/
+    /*
     private void colorSequence() // NOT FINISHED
     {
         string white = winsOrderNumber[0].ToString();
@@ -116,27 +130,29 @@ public class Osc : MonoBehaviour
         {
             if (winsOrderNumber[i] == 0)
             {
-                Debug.Log("white");
+                //Debug.Log("white");
                 // play color animation
-            } 
+                //ColoredBall.GetComponent<Animator>().Play("ballNothingWhite");
+
+            }
             else if (winsOrderNumber[i] == 1)
             {
-                Debug.Log("red");
+                //Debug.Log("red");
                 // play color animation
             }
             else if (winsOrderNumber[i] == 2)
             {
-                Debug.Log("green");
+                //Debug.Log("green");
                 // play color animation
             }
             else if (winsOrderNumber[i] == 3)
             {
-                Debug.Log("blue");
+                //Debug.Log("blue");
                 // play color animation
             }
         }
-    }
-
+    }*/
+    /*
     private void LightPuzzle(float value)
     {
         recentWin = false;
@@ -158,6 +174,54 @@ public class Osc : MonoBehaviour
             Debug.Log("fail");
             winsOrderSuccess = 0;
         }
+    }*/
+
+    private void LightPuzzle(float value)
+    {
+        recentWin = false;
+
+        if (value == winsOrderSuccess && winsOrderSuccess <= 2)
+        {
+            Debug.Log("doing well");
+            winsOrderSuccess++;
+            recentWin = true;
+            return;
+        }
+        else if (winsOrderSuccess == 3 && value == winsOrderSuccess)
+        {
+            Debug.Log("win");
+            ringWin = false;
+            StartCoroutine(trophy());
+        }
+        else if (value != 0 && recentWin != true)
+        {
+            Debug.Log("fail");
+            winsOrderSuccess = 0;
+        }
+    }
+
+    private IEnumerator colorSequence()
+    {
+
+        ColoredBall.GetComponent<Animator>().Play("ballNothingBlue");
+        yield return new WaitForSeconds(2);
+        ColoredBall.GetComponent<Animator>().Play("ballBlueToRed");
+        yield return new WaitForSeconds(2);
+        ColoredBall.GetComponent<Animator>().Play("ballRedToWhite");
+        yield return new WaitForSeconds(2);
+        ColoredBall.GetComponent<Animator>().Play("ballWhiteToGreen");
+        yield return new WaitForSeconds(2);
+        ColoredBall.GetComponent<Animator>().Play("ballGreenToNothing");
+        yield break;
+    }
+
+    private IEnumerator trophy()
+    {
+
+        bigRing.GetComponent<Animator>().Play("wheelSuccess");
+        yield return new WaitForSeconds(2);
+
+        yield break;
     }
 
     public static float ScaleValue(float value, float inputMin, float inputMax, float outputMin, float outputMax)
@@ -229,7 +293,7 @@ public class Osc : MonoBehaviour
             else if (currentRotation >= 191 && currentRotation <= 211 && ringSuccess == 2 && value == 0)
             {
                 ringWin = true;
-                colorSequence();
+                //colorSequence();
                 Debug.Log("win");
                 StartCoroutine(won());
             } 
@@ -247,8 +311,12 @@ public class Osc : MonoBehaviour
     {
         bigRing.GetComponent<Animator>().enabled = true;
         bigRing.GetComponent<Animator>().Play("wheelSuccess");
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
+        ColoredBall.GetComponent<Animator>().Play("ballRise");
+        yield return new WaitForSeconds(2);
         bigRing.GetComponent<Animator>().enabled = false;
+        ColoredBall.GetComponent<Animator>().Play("ballIdle");
+        StartCoroutine (colorSequence());
         yield break;
     }
 
@@ -286,26 +354,29 @@ public class Osc : MonoBehaviour
 
         whiteKey = value;
 
-        if (ringWin == false && value == 0)
+
+        if (ringWin == false && value == 0 && isLooking == false)
         {
             ringSuccess = 0;
             StartCoroutine(looking());
         }
 
-        winsOrder[whitePosition] = whiteKey;
+        //winsOrder[whitePosition] = whiteKey;
 
-        if(ringWin == true)
+        if(ringWin == true && value == 0)
         {
-            LightPuzzle(whiteKey);
+            LightPuzzle(2);
         }
         
     }
 
     private IEnumerator looking()
     {
+        isLooking = true;
         player.GetComponent<Animator>().Play("shineLight");
         yield return new WaitForSeconds(10);
         player.GetComponent<Animator>().Play("shineOff");
+        isLooking = false;
         yield break;
     }
 
@@ -332,11 +403,11 @@ public class Osc : MonoBehaviour
 
         redKey = value;
 
-        winsOrder[redPosition] = redKey;
+        //winsOrder[redPosition] = redKey;
 
-        if (ringWin == true)
+        if (ringWin == true && value == 0)
         {
-            LightPuzzle(redKey);
+            LightPuzzle(1);
         }
     }
 
@@ -363,11 +434,11 @@ public class Osc : MonoBehaviour
 
         greenKey = value;
 
-        winsOrder[greenPosition] = greenKey;
+        //winsOrder[greenPosition] = greenKey;
 
-        if (ringWin == true)
+        if (ringWin == true && value == 0)
         {
-            LightPuzzle(greenKey);
+            LightPuzzle(3);
         }
 
 
@@ -396,11 +467,11 @@ public class Osc : MonoBehaviour
 
         blueKey = value;
 
-        winsOrder[bluePosition] = blueKey;
+        //winsOrder[bluePosition] = blueKey;
 
-        if (ringWin == true)
+        if (ringWin == true && value == 0)
         {
-            LightPuzzle(blueKey);
+            LightPuzzle(0);
         }
 
 
