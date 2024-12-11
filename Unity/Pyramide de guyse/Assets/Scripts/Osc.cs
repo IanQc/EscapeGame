@@ -5,6 +5,7 @@ using extOSC;
 using static UnityEngine.GraphicsBuffer;
 using Unity.VisualScripting;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Osc : MonoBehaviour
 {
@@ -193,10 +194,11 @@ public class Osc : MonoBehaviour
             ringWin = false;
             StartCoroutine(trophy());
         }
-        else if (value != 0 && recentWin != true)
+        else if (value != winsOrderSuccess && recentWin != true)
         {
             Debug.Log("fail");
             winsOrderSuccess = 0;
+            StartCoroutine(colorSequence());
         }
     }
 
@@ -218,9 +220,9 @@ public class Osc : MonoBehaviour
     private IEnumerator trophy()
     {
 
-        bigRing.GetComponent<Animator>().Play("wheelSuccess");
+        ColoredBall.GetComponent<Animator>().Play("ballGameFinished");
         yield return new WaitForSeconds(2);
-
+        SceneManager.LoadScene("PyramidOfGyatt");
         yield break;
     }
 
