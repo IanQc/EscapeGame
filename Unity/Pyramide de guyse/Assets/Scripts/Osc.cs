@@ -12,6 +12,7 @@ public class Osc : MonoBehaviour
     public extOSC.OSCTransmitter oscTransmitter;
 
     // Related to the ring puzzle
+    public GameObject bigRing;
     public GameObject[] ring;
     private int ringSuccess = 0;
     private float currentRotation = 0;
@@ -186,7 +187,11 @@ public class Osc : MonoBehaviour
         //Debug.Log(value);
 
         // Appliquer la rotation au GameObject ciblé :
-        ring[ringSuccess].transform.eulerAngles = new Vector3(ring[ringSuccess].transform.rotation.eulerAngles.x, value, ring[ringSuccess].transform.rotation.eulerAngles.z);
+        if (ringWin == false)
+        {
+            ring[ringSuccess].transform.eulerAngles = new Vector3(ring[ringSuccess].transform.rotation.eulerAngles.x, value, ring[ringSuccess].transform.rotation.eulerAngles.z);
+        }
+        
     }
 
     void TraiterConfirmOSC(OSCMessage oscMessage)
@@ -210,21 +215,52 @@ public class Osc : MonoBehaviour
 
         //Debug.Log(value);
 
-        if (currentRotation >= 195 && currentRotation <= 215 && ringSuccess == 0 && value == 0)
+        if (ringWin == false)
         {
-            ringSuccess++;
-        }
-        else if (currentRotation >= 110 && currentRotation <= 140 && ringSuccess == 1 && value == 0)
-        {
-            ringSuccess++;
+            if (currentRotation >= 195 && currentRotation <= 215 && ringSuccess == 0 && value == 0)
+            {
+                ringSuccess++;
+            }
+            else if (currentRotation >= 110 && currentRotation <= 140 && ringSuccess == 1 && value == 0)
+            {
+                ringSuccess++;
 
+            }
+            else if (currentRotation >= 191 && currentRotation <= 211 && ringSuccess == 2 && value == 0)
+            {
+                ringWin = true;
+                colorSequence();
+                Debug.Log("win");
+                StartCoroutine(won());
+            } 
+            else if (value == 0)
+            {
+                ringSuccess = 0;
+                StartCoroutine(wrong());
+            }
         }
-        else if (currentRotation >= 191 && currentRotation <= 211 && ringSuccess == 2 && value == 0)
-        {
-            ringWin = true;
-            colorSequence();
-            Debug.Log("win");
-        }
+
+
+    }
+    
+    private IEnumerator won()
+    {
+        bigRing.GetComponent<Animator>().enabled = true;
+        bigRing.GetComponent<Animator>().Play("wheelSuccess");
+        yield return new WaitForSeconds(5);
+        bigRing.GetComponent<Animator>().enabled = false;
+        yield break;
+    }
+
+    private IEnumerator wrong()
+    {
+        bigRing.GetComponent<Animator>().enabled = true;
+        bigRing.GetComponent<Animator>().Play("wheelFail");
+        yield return new WaitForSeconds(1);
+        bigRing.GetComponent<Animator>().Play("idleWheel");
+        yield return new WaitForSeconds(1);
+        bigRing.GetComponent<Animator>().enabled = false;
+        yield break;
     }
 
     void TraiterWhiteOSC(OSCMessage oscMessage)
@@ -250,6 +286,12 @@ public class Osc : MonoBehaviour
 
         whiteKey = value;
 
+        if (ringWin == false && value == 0)
+        {
+            ringSuccess = 0;
+            StartCoroutine(looking());
+        }
+
         winsOrder[whitePosition] = whiteKey;
 
         if(ringWin == true)
@@ -257,6 +299,14 @@ public class Osc : MonoBehaviour
             LightPuzzle(whiteKey);
         }
         
+    }
+
+    private IEnumerator looking()
+    {
+        player.GetComponent<Animator>().Play("shineLight");
+        yield return new WaitForSeconds(10);
+        player.GetComponent<Animator>().Play("shineOff");
+        yield break;
     }
 
     void TraiterRedOSC(OSCMessage oscMessage)

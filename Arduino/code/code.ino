@@ -121,10 +121,8 @@ void loop() {
     int encoderRotation = myEncoder.getEncoderValue();
     int encoderButton = myEncoder.getButtonStatus();
 
-    if(lastEncoderRotation != encoderRotation) {
-      monOsc.sendInt("/rotation", encoderRotation);
-    }
-    lastEncoderRotation = encoderRotation;
+    monOsc.sendInt("/rotation", encoderRotation);
+
 
     if(lastEncoderPress != encoderButton) {
       monOsc.sendInt("/button", encoderButton);

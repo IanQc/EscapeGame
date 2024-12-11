@@ -7,6 +7,8 @@ public class intro : MonoBehaviour
     public GameObject joueur;
     public GameObject uvLight;
     // Start is called before the first frame update
+    public GameObject osc;
+
     void Start()
     {
         StartCoroutine(overview());
@@ -29,6 +31,7 @@ public class intro : MonoBehaviour
         yield return new WaitForSeconds(5);
         joueur.GetComponent<Animator>().Play("shineOff");
         yield return new WaitForSeconds(5);
+        osc.GetComponent<Osc>().enabled = true;
         uvLight.GetComponent<Animator>().Play("uvPowerOn");
         yield return new WaitForSeconds(5);
         uvLight.GetComponent<Animator>().Play("uvPowerOff");

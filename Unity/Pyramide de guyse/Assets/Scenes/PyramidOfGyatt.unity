@@ -1757,11 +1757,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 407726, guid: c0df214d13f58a049aaf0e5705beb53e, type: 3}
   m_PrefabInstance: {fileID: 644203164}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &645553995 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9161420556792827848, guid: 973c2418f316bb84b84b8432b0e7e959, type: 3}
-  m_PrefabInstance: {fileID: 7795824319655780285}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &656608020
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2647,18 +2642,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 882908246}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8b7b4413a465e9648b4ff6ac8a2e0735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   oscReceiver: {fileID: 882908247}
   oscTransmitter: {fileID: 882908250}
+  bigRing: {fileID: 1824957972}
   ring:
   - {fileID: 1824957976}
   - {fileID: 1824957975}
   - {fileID: 1824957974}
-  player: {fileID: 645553995}
+  player: {fileID: 1085535750}
   UVlight: {fileID: 894415808}
 --- !u!114 &882908250
 MonoBehaviour:
@@ -4651,6 +4647,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   joueur: {fileID: 1085535750}
   uvLight: {fileID: 894415808}
+  osc: {fileID: 882908246}
 --- !u!4 &1646407885
 Transform:
   m_ObjectHideFlags: 0
@@ -5287,7 +5284,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824957972}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: f9b05630e84a72440b375295f5107bb7, type: 2}
   m_CullingMode: 0
