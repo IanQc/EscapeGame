@@ -12,6 +12,11 @@ public class Osc : MonoBehaviour
     public extOSC.OSCReceiver oscReceiver;
     public extOSC.OSCTransmitter oscTransmitter;
 
+    // sons 
+    public AudioClip wheel;
+    public AudioClip ball;
+    public AudioSource effetsSonores;
+
     // Related to the ring puzzle
     public GameObject bigRing;
     public GameObject[] ring;
@@ -57,7 +62,7 @@ public class Osc : MonoBehaviour
         oscReceiver.Bind("/button", TraiterConfirmOSC);
 
         Debug.Log("code is : blue, red, white, green");
-
+        effetsSonores = GetComponent<AudioSource>();
         /*
         Shuffle(winsOrderNumber);
 
@@ -204,15 +209,19 @@ public class Osc : MonoBehaviour
 
     private IEnumerator colorSequence()
     {
-
+        effetsSonores.PlayOneShot(ball, 0.3f);
         ColoredBall.GetComponent<Animator>().Play("ballNothingBlue");
         yield return new WaitForSeconds(2);
+        effetsSonores.PlayOneShot(ball, 0.3f);
         ColoredBall.GetComponent<Animator>().Play("ballBlueToRed");
         yield return new WaitForSeconds(2);
+        effetsSonores.PlayOneShot(ball, 0.3f);
         ColoredBall.GetComponent<Animator>().Play("ballRedToWhite");
         yield return new WaitForSeconds(2);
+        effetsSonores.PlayOneShot(ball, 0.3f);
         ColoredBall.GetComponent<Animator>().Play("ballWhiteToGreen");
         yield return new WaitForSeconds(2);
+        effetsSonores.PlayOneShot(ball, 0.3f);
         ColoredBall.GetComponent<Animator>().Play("ballGreenToNothing");
         yield break;
     }
@@ -311,6 +320,7 @@ public class Osc : MonoBehaviour
     
     private IEnumerator won()
     {
+        effetsSonores.PlayOneShot(wheel, 0.3f);
         bigRing.GetComponent<Animator>().enabled = true;
         bigRing.GetComponent<Animator>().Play("wheelSuccess");
         yield return new WaitForSeconds(2);
