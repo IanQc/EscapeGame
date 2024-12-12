@@ -231,7 +231,7 @@ public class Osc : MonoBehaviour
 
         ColoredBall.GetComponent<Animator>().Play("ballGameFinished");
         yield return new WaitForSeconds(10);
-        SceneManager.LoadScene("PyramidOfGyatt");
+        SceneManager.LoadScene("PyramidOfGuyse");
         yield break;
     }
 
