@@ -209,19 +209,19 @@ public class Osc : MonoBehaviour
 
     private IEnumerator colorSequence()
     {
-        effetsSonores.PlayOneShot(ball, 0.3f);
+        effetsSonores.PlayOneShot(ball, 2f);
         ColoredBall.GetComponent<Animator>().Play("ballNothingBlue");
         yield return new WaitForSeconds(2);
-        effetsSonores.PlayOneShot(ball, 0.3f);
+        effetsSonores.PlayOneShot(ball, 2f);
         ColoredBall.GetComponent<Animator>().Play("ballBlueToRed");
         yield return new WaitForSeconds(2);
-        effetsSonores.PlayOneShot(ball, 0.3f);
+        effetsSonores.PlayOneShot(ball, 2f);
         ColoredBall.GetComponent<Animator>().Play("ballRedToWhite");
         yield return new WaitForSeconds(2);
-        effetsSonores.PlayOneShot(ball, 0.3f);
+        effetsSonores.PlayOneShot(ball, 2f);
         ColoredBall.GetComponent<Animator>().Play("ballWhiteToGreen");
         yield return new WaitForSeconds(2);
-        effetsSonores.PlayOneShot(ball, 0.3f);
+        effetsSonores.PlayOneShot(ball, 2f);
         ColoredBall.GetComponent<Animator>().Play("ballGreenToNothing");
         yield break;
     }
@@ -230,7 +230,7 @@ public class Osc : MonoBehaviour
     {
 
         ColoredBall.GetComponent<Animator>().Play("ballGameFinished");
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(10);
         SceneManager.LoadScene("PyramidOfGyatt");
         yield break;
     }
@@ -320,7 +320,7 @@ public class Osc : MonoBehaviour
     
     private IEnumerator won()
     {
-        effetsSonores.PlayOneShot(wheel, 0.3f);
+        effetsSonores.PlayOneShot(wheel, 1f);
         bigRing.GetComponent<Animator>().enabled = true;
         bigRing.GetComponent<Animator>().Play("wheelSuccess");
         yield return new WaitForSeconds(2);

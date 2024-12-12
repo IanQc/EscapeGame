@@ -2639,9 +2639,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 949090bad9ad8144788470259efd513e, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.776
+  m_Volume: 0.05
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -2806,8 +2806,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   oscReceiver: {fileID: 882908247}
   oscTransmitter: {fileID: 882908250}
-  wheel: {fileID: 0}
-  ball: {fileID: 0}
+  wheel: {fileID: 8300000, guid: 3561775a56d89d44f9138aca3be8623c, type: 3}
+  ball: {fileID: 8300000, guid: 814865827da19c74380e2468c913bcf0, type: 3}
   effetsSonores: {fileID: 0}
   bigRing: {fileID: 1824957972}
   ring:
@@ -2859,7 +2859,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
