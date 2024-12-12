@@ -937,7 +937,13 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
+    Build: 0
+    Game Performance: 0
+    Legacy Analytics: 0
+    Purchasing: 0
+    UDP: 0
     UNet: 1
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -957,11 +963,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 86131e0d-75f2-4078-aadf-c6e3e7aa0494
+  cloudProjectId: 2c9d0b4c-aea5-4237-9501-1fbdcaf9e1dc
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Pyramide de guyse
-  organizationId: marexisme
+  organizationId: kingside
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
